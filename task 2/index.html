@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Intermediate HTML, CSS & JS Task</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Flexbox Navbar -->
+  <nav class="navbar">
+    <div class="logo">MySite</div>
+    <ul class="nav-links">
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#todo">To-Do List</a></li>
+    </ul>
+  </nav>
+
+  <div class="grid-container">
+    <!-- Contact Form (Step 1 & 2) -->
+    <section id="contact" class="box">
+      <h2>Contact Us</h2>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Your Email" required />
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+      <p id="error" class="error"></p>
+    </section>
+
+    <!-- To-Do List (Step 4) -->
+    <section id="todo" class="box">
+      <h2>To‑Do List</h2>
+      <div class="todo-container">
+        <input type="text" id="todoInput" placeholder="New task…" />
+        <button id="addBtn">Add</button>
+        <ul id="todoList"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
