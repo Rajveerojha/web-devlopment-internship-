@@ -1,0 +1,247 @@
+<!-- Full Project Implementation: Task 4 - ApexPlanet -->
+<!-- Project 1: Personal Portfolio Website + To-Do App + Product Listing Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(to right, #2193b0, #6dd5ed);
+      color: #222;
+      min-height: 100vh;
+      padding: 30px 15px;
+    }
+    header, section, footer {
+      padding: 20px;
+      margin: 10px auto;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #0077b6;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #d81b60;
+    }
+    nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      color: #00796b;
+    }
+    .project {
+      margin-top: 10px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #f1f8e9;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9em;
+      background: #00796b;
+      color: white;
+      border-radius: 10px;
+    }
+
+    /* To-Do App styles */
+    .todo-container { margin-top: 20px; }
+    .todo-input {
+      padding: 10px;
+      width: 70%;
+      border: 2px solid #b2ebf2;
+      border-radius: 6px;
+    }
+    .todo-button {
+      padding: 10px 20px;
+      background: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .todo-list {
+      margin-top: 10px;
+      list-style: none;
+    }
+    .todo-item {
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      border-radius: 6px;
+      background: #fffde7;
+    }
+    .delete-btn {
+      float: right;
+      background: #e53935;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Product Listing styles */
+    .filter-sort {
+      margin: 10px 0;
+    }
+    .filter-sort select {
+      margin-left: 10px;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .product-item {
+      flex: 1 1 200px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+      background: #e3f2fd;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I'm a passionate web developer skilled in HTML, CSS, JavaScript, and frontend development. I love creating beautiful and functional websites.</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project">
+      <h3>To-Do App</h3>
+      <div class="todo-container">
+        <input type="text" id="todo-input" class="todo-input" placeholder="Enter a task..." />
+        <button onclick="addTodo()" class="todo-button">Add</button>
+        <ul id="todo-list" class="todo-list"></ul>
+      </div>
+    </div>
+
+    <div class="project">
+      <h3>Product Listing Page</h3>
+      <div class="filter-sort">
+        <label>Filter by Category: </label>
+        <select id="filter" onchange="renderProducts()">
+          <option value="all">All</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+        </select>
+
+        <label>Sort by Price: </label>
+        <select id="sort" onchange="renderProducts()">
+          <option value="default">Default</option>
+          <option value="low">Low to High</option>
+          <option value="high">High to Low</option>
+        </select>
+      </div>
+      <div id="product-list" class="product-list"></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: yourname@example.com</p>
+    <p>GitHub: github.com/yourusername</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // TO-DO APP
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+    const list = document.getElementById('todo-list');
+
+    function renderTodos() {
+      list.innerHTML = '';
+      todos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        li.innerHTML = `${todo} <button class="delete-btn" onclick="deleteTodo(${index})">Delete</button>`;
+        list.appendChild(li);
+      });
+    }
+
+    function addTodo() {
+      const input = document.getElementById('todo-input');
+      if (input.value.trim()) {
+        todos.push(input.value.trim());
+        localStorage.setItem('todos', JSON.stringify(todos));
+        input.value = '';
+        renderTodos();
+      }
+    }
+
+    function deleteTodo(index) {
+      todos.splice(index, 1);
+      localStorage.setItem('todos', JSON.stringify(todos));
+      renderTodos();
+    }
+
+    renderTodos();
+
+    // PRODUCT LISTING
+    const products = [
+      { name: 'Smartphone', price: 15000, category: 'electronics' },
+      { name: 'Jeans', price: 1200, category: 'clothing' },
+      { name: 'Laptop', price: 55000, category: 'electronics' },
+      { name: 'T-Shirt', price: 500, category: 'clothing' }
+    ];
+
+    function renderProducts() {
+      const filter = document.getElementById('filter').value;
+      const sort = document.getElementById('sort').value;
+      let filtered = [...products];
+
+      if (filter !== 'all') {
+        filtered = filtered.filter(p => p.category === filter);
+      }
+
+      if (sort === 'low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sort === 'high') {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-item';
+        div.innerHTML = `<strong>${p.name}</strong><br>Price: ₹${p.price}<br>Category: ${p.category}`;
+        container.appendChild(div);
+      });
+    }
+
+    renderProducts();
+  </script>
